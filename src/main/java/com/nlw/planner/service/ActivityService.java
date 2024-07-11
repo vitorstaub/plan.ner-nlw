@@ -1,6 +1,11 @@
-package com.nlw.planner.activity;
+package com.nlw.planner.service;
 
-import com.nlw.planner.trip.Trip;
+import com.nlw.planner.model.Activity;
+import com.nlw.planner.dto.ActivityDTO;
+import com.nlw.planner.dto.ActivityRequestPayload;
+import com.nlw.planner.dto.ActivityResponseDTO;
+import com.nlw.planner.repository.ActivityRepository;
+import com.nlw.planner.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

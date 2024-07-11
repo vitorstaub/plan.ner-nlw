@@ -1,14 +1,13 @@
-package com.nlw.planner.trip;
+package com.nlw.planner.controller;
 
-import com.nlw.planner.activity.ActivityDTO;
-import com.nlw.planner.activity.ActivityRequestPayload;
-import com.nlw.planner.activity.ActivityResponseDTO;
-import com.nlw.planner.activity.ActivityService;
-import com.nlw.planner.link.LinkDTO;
-import com.nlw.planner.link.LinkRequestPayload;
-import com.nlw.planner.link.LinkResponseDTO;
-import com.nlw.planner.link.LinkService;
-import com.nlw.planner.participant.*;
+import com.nlw.planner.dto.*;
+import com.nlw.planner.service.ActivityService;
+import com.nlw.planner.service.LinkService;
+import com.nlw.planner.service.ParticipantService;
+import com.nlw.planner.model.Trip;
+import com.nlw.planner.repository.TripRepository;
+import com.nlw.planner.dto.TripRequestPayload;
+import com.nlw.planner.dto.TripResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

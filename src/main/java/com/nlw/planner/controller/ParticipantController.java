@@ -1,5 +1,8 @@
-package com.nlw.planner.participant;
+package com.nlw.planner.controller;
 
+import com.nlw.planner.dto.ParticipantRequestPayload;
+import com.nlw.planner.model.Participant;
+import com.nlw.planner.repository.PartipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

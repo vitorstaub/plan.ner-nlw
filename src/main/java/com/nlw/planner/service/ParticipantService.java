@@ -1,6 +1,10 @@
-package com.nlw.planner.participant;
+package com.nlw.planner.service;
 
-import com.nlw.planner.trip.Trip;
+import com.nlw.planner.dto.ParticipantDTO;
+import com.nlw.planner.dto.ParticipantResponseDTO;
+import com.nlw.planner.model.Participant;
+import com.nlw.planner.repository.PartipantRepository;
+import com.nlw.planner.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

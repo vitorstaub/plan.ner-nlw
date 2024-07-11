@@ -1,5 +1,6 @@
-package com.nlw.planner.activity;
+package com.nlw.planner.repository;
 
+import com.nlw.planner.model.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

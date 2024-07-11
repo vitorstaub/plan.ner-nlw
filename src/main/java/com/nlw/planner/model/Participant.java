@@ -1,6 +1,5 @@
-package com.nlw.planner.participant;
+package com.nlw.planner.model;
 
-import com.nlw.planner.trip.Trip;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

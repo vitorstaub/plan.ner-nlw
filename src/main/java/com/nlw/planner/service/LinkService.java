@@ -1,6 +1,11 @@
-package com.nlw.planner.link;
+package com.nlw.planner.service;
 
-import com.nlw.planner.trip.Trip;
+import com.nlw.planner.dto.LinkDTO;
+import com.nlw.planner.dto.LinkRequestPayload;
+import com.nlw.planner.dto.LinkResponseDTO;
+import com.nlw.planner.model.Link;
+import com.nlw.planner.repository.LinkRepository;
+import com.nlw.planner.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
