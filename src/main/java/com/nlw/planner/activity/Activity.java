@@ -1,4 +1,4 @@
-package com.nlw.planner.activities;
+package com.nlw.planner.activity;
 
 import com.nlw.planner.trip.Trip;
 import jakarta.persistence.*;
@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "activities")
+@Table(name = "activity")
 @Getter
 @Setter
 @AllArgsConstructor
