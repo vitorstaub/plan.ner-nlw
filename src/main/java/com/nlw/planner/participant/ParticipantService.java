@@ -19,11 +19,11 @@ public class ParticipantService {
         this.repository.saveAll(participants);
     }
 
-    public ParticipantCreateResponse registerParticipantToEvent(String email, Trip trip) {
+    public ParticipantResponseDTO registerParticipantToEvent(String email, Trip trip) {
         Participant newParticipant = new Participant(email, trip);
         this.repository.save(newParticipant);
 
-        return new ParticipantCreateResponse(newParticipant.getId());
+        return new ParticipantResponseDTO(newParticipant.getId());
     }
 
     public void triggerConfirmationEmailToParticipants(UUID tripId) {}

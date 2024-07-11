@@ -13,12 +13,12 @@ public class ActivityService {
     @Autowired
     private ActivityRepository repository;
 
-    public ActivityResponse registerActivity(ActivityRequestPayload payload, Trip trip) {
+    public ActivityResponseDTO registerActivity(ActivityRequestPayload payload, Trip trip) {
         Activity newActivity = new Activity(payload.title(), payload.occurs_at(), trip);
 
         this.repository.save(newActivity);
 
-        return new ActivityResponse(newActivity.getId());
+        return new ActivityResponseDTO(newActivity.getId());
     }
 
     public List<ActivityDTO> getAllActivitiesFromId(UUID tripId) {

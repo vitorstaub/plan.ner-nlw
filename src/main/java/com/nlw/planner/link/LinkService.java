@@ -1,11 +1,9 @@
 package com.nlw.planner.link;
 
-import com.nlw.planner.activity.ActivityDTO;
 import com.nlw.planner.trip.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,12 +13,12 @@ public class LinkService {
     @Autowired
     private LinkRepository repository;
 
-    public LinkResponse registerLink(LinkRequestPayload payload, Trip trip) {
+    public LinkResponseDTO registerLink(LinkRequestPayload payload, Trip trip) {
         Link newLink = new Link(payload.title(), payload.url(), trip);
 
         this.repository.save(newLink);
 
-        return new LinkResponse(newLink.getId());
+        return new LinkResponseDTO(newLink.getId());
     }
 
     public List<LinkDTO> getAllLinksFromId(UUID tripId) {
