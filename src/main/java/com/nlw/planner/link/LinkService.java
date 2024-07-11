@@ -23,7 +23,7 @@ public class LinkService {
         return new LinkResponse(newLink.getId());
     }
 
-    public List<ActivityDTO> getAllLinksFromId(UUID tripId) {
-        return new ArrayList<>();
+    public List<LinkDTO> getAllLinksFromId(UUID tripId) {
+        return this.repository.findByTripId(tripId).stream().map(link -> new LinkDTO(link.getId(),link.getTitle(), link.getUrl())).toList();
     }
 }

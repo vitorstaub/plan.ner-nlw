@@ -4,6 +4,7 @@ import com.nlw.planner.activity.ActivityDTO;
 import com.nlw.planner.activity.ActivityRequestPayload;
 import com.nlw.planner.activity.ActivityResponse;
 import com.nlw.planner.activity.ActivityService;
+import com.nlw.planner.link.LinkDTO;
 import com.nlw.planner.link.LinkRequestPayload;
 import com.nlw.planner.link.LinkResponse;
 import com.nlw.planner.link.LinkService;
@@ -147,5 +148,12 @@ public class TripController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/links")
+    public ResponseEntity<List<LinkDTO>> getAllLinks(@PathVariable UUID id) {
+        List<LinkDTO> links = this.linkService.getAllLinksFromId(id);
+
+        return ResponseEntity.ok(links);
     }
 }
