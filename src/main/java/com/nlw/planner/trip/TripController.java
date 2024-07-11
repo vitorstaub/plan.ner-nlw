@@ -1,5 +1,6 @@
 package com.nlw.planner.trip;
 
+import com.nlw.planner.activities.ActivityDTO;
 import com.nlw.planner.activities.ActivityRequestPayload;
 import com.nlw.planner.activities.ActivityResponse;
 import com.nlw.planner.activities.ActivityService;
@@ -118,5 +119,12 @@ public class TripController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/activities")
+    public ResponseEntity<List<ActivityDTO>> getAllActivities(@PathVariable UUID id) {
+        List<ActivityDTO> activities = this.activityService.getAllActivitiesFromId(id);
+
+        return ResponseEntity.ok(activities);
     }
 }
