@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: planner-deployment
+  labels:
+    app: planner
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: planner
+  template:
+    metadata:
+      labels:
+        app: planner
+    spec:
+      containers:
+        - name: planner-api
+          image: vitorstaub/planner:0f95507
+          env:
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-connection
+                  key: db_url
+
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-connection
+                  key: db_user
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-connection
+                  key: db_password
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 1Gi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
