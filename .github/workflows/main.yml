@@ -1,1 +1,23 @@
+name: CI
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    name: 'Build and Push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # generate tag according to commit
+
+      - name: Build docker image
+        run: docker build -t vitorstaub/planner:latest
+
+      # login in container registry
+      # pull image
