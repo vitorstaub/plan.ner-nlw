@@ -17,7 +17,7 @@ jobs:
       # generate tag according to commit
 
       - name: Build docker image
-        run: docker build -t vitorstaub/planner:latest
+        run: docker build -t vitorstaub/planner:latest .
 
       # login in container registry
       # pull image
