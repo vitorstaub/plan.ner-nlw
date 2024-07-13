@@ -6,7 +6,7 @@ COPY pom.xml /app
 WORKDIR /app
 RUN mvn clean install
 
-FROM amazoncorretto:21
+FROM amazoncorretto:21-alpine3.16
 
 ENV DB_URL=${DB_URL}
 ENV DB_USER=${DB_USER}
