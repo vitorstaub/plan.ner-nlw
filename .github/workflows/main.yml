@@ -15,9 +15,14 @@ jobs:
         uses: actions/checkout@v4
 
       # generate tag according to commit
+      - name: Generate SHA
+        id: generate_sha
+        run: |
+          SHA=$(echo $GITHUB_SHA | head -c7)
+          echo "sha=$SHA" >> $GITHUB_OUTPUT
 
       - name: Build docker image
-        run: docker build -t vitorstaub/planner:latest .
+        run: docker build -t vitorstaub/planner:${{ steps.generate_sha.outputs.sha }} .
 
       # login in container registry
       # pull image
