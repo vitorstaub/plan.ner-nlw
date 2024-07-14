@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: vitorstaub/planner
   pullPolicy: IfNotPresent
-  tag: "02e3b2a"
+  tag: "dcebc46"
   containerPort: 8080
 
 imagePullSecrets: []
