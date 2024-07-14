@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: planner-api
-          image: vitorstaub/planner:0f95507
+          image: vitorstaub/planner:02e3b2a
           env:
             - name: DB_URL
               valueFrom:
@@ -41,8 +41,8 @@ spec:
             - containerPort: 8080
           resources:
             requests:
-              cpu: 1000m
-              memory: 1Gi
+              cpu: 100m
+              memory: 256Mi
             limits:
-              cpu: 2000m
-              memory: 2Gi
+              cpu: 300m
+              memory: 512Mi
