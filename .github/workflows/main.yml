@@ -58,3 +58,15 @@ jobs:
 #          docker push vitorstaub/planner:${{ steps.generate_sha.outputs.sha }}
 #          docker tag vitorstaub/planner:${{ steps.generate_sha.outputs.sha }} vitorstaub/planner:latest
 #          docker push vitorstaub/planner:latest
+
+#      - name: Update image helm (CD)
+#        uses: fjogeleit/yaml-update-action@main
+#        with:
+##         branch: release
+#         targetBranch: main
+##         createPR: true
+#         valueFile: 'deploy/values.yaml'
+#         propertyPath: 'image.tag'
+#         value: ${{ steps.generate_sha.outputs.sha }}
+#         commitChange: true
+#         message: "NEW: Update tag in values helm"
