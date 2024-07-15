@@ -1,6 +1,7 @@
 package com.nlw.planner.model;
 
 import com.nlw.planner.dto.TripRequestPayload;
+import com.nlw.planner.exceptions.InvalidTripPeriod;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class Trip {
     private String destination;
 
     @Column(name = "starts_at", nullable = false)
-    private LocalDateTime starsAt;
+    private LocalDateTime startsAt;
 
     @Column(name = "ends_at", nullable = false)
     private LocalDateTime endsAt;
@@ -45,7 +46,9 @@ public class Trip {
         this.isConfirmed = false;
         this.ownerEmail = data.owner_email();
         this.ownerName = data.owner_name();
-        this.starsAt = LocalDateTime.parse(data.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
+        this.startsAt = LocalDateTime.parse(data.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
         this.endsAt = LocalDateTime.parse(data.ends_at(), DateTimeFormatter.ISO_DATE_TIME);
+
+        if (startsAt.isAfter(endsAt)) throw new InvalidTripPeriod();
     }
 }

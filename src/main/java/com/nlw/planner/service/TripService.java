@@ -24,7 +24,7 @@ public class TripService {
     }
 
     public Trip updateTrip(TripRequestPayload payload, Trip rawTrip) {
-        rawTrip.setStarsAt(LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME));
+        rawTrip.setStartsAt(LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME));
         rawTrip.setEndsAt(LocalDateTime.parse(payload.ends_at(), DateTimeFormatter.ISO_DATE_TIME));
         rawTrip.setDestination(payload.destination());
 

@@ -1,5 +1,6 @@
 package com.nlw.planner.service;
 
+import com.nlw.planner.exceptions.InvalidTripPeriod;
 import com.nlw.planner.model.Activity;
 import com.nlw.planner.dto.ActivityDTO;
 import com.nlw.planner.dto.ActivityRequestPayload;
@@ -20,6 +21,11 @@ public class ActivityService {
 
     public ActivityResponseDTO registerActivity(ActivityRequestPayload payload, Trip trip) {
         Activity newActivity = new Activity(payload.title(), payload.occurs_at(), trip);
+
+        var activityOccurs = newActivity.getOccursAt();
+        if (activityOccurs.isAfter(trip.getEndsAt()) || activityOccurs.isBefore(trip.getStartsAt())) {
+            throw new InvalidTripPeriod();
+        }
 
         this.repository.save(newActivity);
 
