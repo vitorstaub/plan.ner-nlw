@@ -1,6 +1,7 @@
 package com.nlw.planner.infra;
 
 import com.nlw.planner.exceptions.InvalidTripPeriod;
+import com.nlw.planner.exceptions.ParticipantNotFound;
 import com.nlw.planner.exceptions.TripNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,12 @@ import java.time.format.DateTimeParseException;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(TripNotFound.class)
     private ResponseEntity<RestMessageError> tripNotFoundHandler(TripNotFound exception) {
+        var response = new RestMessageError(HttpStatus.NOT_FOUND.value(), exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(ParticipantNotFound.class)
+    private ResponseEntity<RestMessageError> participantNotFoundHandler(ParticipantNotFound exception) {
         var response = new RestMessageError(HttpStatus.NOT_FOUND.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
