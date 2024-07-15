@@ -8,6 +8,7 @@ import com.nlw.planner.model.Trip;
 import com.nlw.planner.repository.TripRepository;
 import com.nlw.planner.dto.TripRequestPayload;
 import com.nlw.planner.dto.TripResponseDTO;
+import com.nlw.planner.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,17 +34,23 @@ public class TripController {
     private LinkService linkService;
 
     @Autowired
+    private TripService tripService;
+
+    @Autowired
     private TripRepository repository;
 
     @PostMapping
     public ResponseEntity<TripResponseDTO> createTrip(@RequestBody TripRequestPayload payload) {
-        Trip newTrip = new Trip(payload);
+        var responseDTO = this.tripService.registerTrip(payload);
 
-        this.repository.save(newTrip);
+        Optional<Trip> newTrip = repository.findById(responseDTO.tripId());
 
-        this.participantService.registerParticipantsToEvent(payload.emails_to_invite(), newTrip);
+        if (newTrip.isPresent()) {
+            var rawTrip = newTrip.get();
+            this.participantService.registerParticipantsToEvent(payload.emails_to_invite(), rawTrip);
+        }
 
-        return ResponseEntity.ok(new TripResponseDTO(newTrip.getId()));
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping("/{id}")
