@@ -32,4 +32,12 @@ public class TripService {
 
         return rawTrip;
     }
+
+    public Trip confirmTrip(Trip trip) {
+        trip.setIsConfirmed(true);
+
+        this.repository.save(trip);
+
+        return trip;
+    }
 }

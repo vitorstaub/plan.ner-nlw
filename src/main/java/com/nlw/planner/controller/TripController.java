@@ -81,12 +81,12 @@ public class TripController {
 
         if (trip.isPresent()) {
             Trip rawTrip = trip.get();
-            rawTrip.setIsConfirmed(true);
 
-            this.repository.save(rawTrip);
+            var updatedTrip = this.tripService.confirmTrip(rawTrip);
+
             this.participantService.triggerConfirmationEmailToParticipants(id);
 
-            return ResponseEntity.ok(rawTrip);
+            return ResponseEntity.ok(updatedTrip);
         }
 
         return ResponseEntity.notFound().build();
