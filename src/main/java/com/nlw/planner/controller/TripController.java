@@ -66,13 +66,10 @@ public class TripController {
 
         if (trip.isPresent()) {
             Trip rawTrip = trip.get();
-            rawTrip.setStarsAt(LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME));
-            rawTrip.setEndsAt(LocalDateTime.parse(payload.ends_at(), DateTimeFormatter.ISO_DATE_TIME));
-            rawTrip.setDestination(payload.destination());
 
-            this.repository.save(rawTrip);
+            var updatedTrip = this.tripService.updateTrip(payload, rawTrip);
 
-            return ResponseEntity.ok(rawTrip);
+            return ResponseEntity.ok(updatedTrip);
         }
 
         return ResponseEntity.notFound().build();

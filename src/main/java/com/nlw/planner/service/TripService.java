@@ -7,6 +7,9 @@ import com.nlw.planner.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class TripService {
     @Autowired
@@ -18,5 +21,15 @@ public class TripService {
         repository.save(newTrip);
 
         return new TripResponseDTO(newTrip.getId());
+    }
+
+    public Trip updateTrip(TripRequestPayload payload, Trip rawTrip) {
+        rawTrip.setStarsAt(LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME));
+        rawTrip.setEndsAt(LocalDateTime.parse(payload.ends_at(), DateTimeFormatter.ISO_DATE_TIME));
+        rawTrip.setDestination(payload.destination());
+
+        this.repository.save(rawTrip);
+
+        return rawTrip;
     }
 }
