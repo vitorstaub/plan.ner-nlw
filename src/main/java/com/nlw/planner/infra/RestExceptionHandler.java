@@ -40,7 +40,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<RestMessageError> ArgumentMismatchHandler(MethodArgumentTypeMismatchException exception) {
-        var response = new RestMessageError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+        var response = new RestMessageError(HttpStatus.BAD_REQUEST.value(), "Invalid Id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
