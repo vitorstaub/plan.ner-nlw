@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,11 +74,57 @@ class TripServiceTest {
 
 
         // Act & Assert
-        assertThrows(InvalidTripPeriod.class, () -> {
-            tripService.registerTrip(payload);
-        });
+        assertThrows(InvalidTripPeriod.class, () -> tripService.registerTrip(payload));
 
         verify(repository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("should update trip successfully")
+    void updateTripCase1() {
+        // Arrange
+        List<String> emails = Arrays.asList("vitor@gmmail", "test@outlook");
+        var payloadTrip = new TripRequestPayload("São Paulo",
+                "2024-06-20T21:51:54.7342",
+                "2024-06-25T21:51:54.7342",
+                emails,
+                "staub@gmail",
+                "staub");
+        var rawTrip = new Trip(payloadTrip);
+        var payload = new TripRequestPayload("Natal",
+                "2024-06-15T21:51:54.7342",
+                "2024-06-30T21:51:54.7342",
+                emails,
+                "staub@gmail",
+                "staub");
+
+        // Act
+        var updatedTrip = tripService.updateTrip(payload, rawTrip);
+
+        assertEquals(LocalDateTime.parse("2024-06-15T21:51:54.7342", DateTimeFormatter.ISO_DATE_TIME), updatedTrip.getStartsAt());
+        assertEquals(LocalDateTime.parse("2024-06-30T21:51:54.7342", DateTimeFormatter.ISO_DATE_TIME), updatedTrip.getEndsAt());
+        assertEquals(payload.destination(), updatedTrip.getDestination());
+
+        verify(repository, times(1)).save(updatedTrip);
+    }
+
+    @Test
+    void confirmTrip() {
+        // Arrange
+        List<String> emails = Arrays.asList("vitor@gmmail", "test@outlook");
+        var payload = new TripRequestPayload("São Paulo",
+                "2024-06-20T21:51:54.7342",
+                "2024-06-25T21:51:54.7342",
+                emails,
+                "staub@gmail",
+                "staub");
+        var trip = new Trip(payload);
+
+        var tripConfirmed = tripService.confirmTrip(trip);
+
+        assertEquals(true, tripConfirmed.getIsConfirmed());
+
+        verify(repository, times(1)).save(any(Trip.class));
     }
 
     @AfterEach
