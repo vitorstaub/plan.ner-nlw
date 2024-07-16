@@ -27,19 +27,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DateTimeParseException.class)
-    private ResponseEntity<RestMessageError> DateTimeParseHandler(DateTimeParseException exception) {
+    private ResponseEntity<RestMessageError> dateTimeParseHandler(DateTimeParseException exception) {
         var response = new RestMessageError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(InvalidTripPeriod.class)
-    private ResponseEntity<RestMessageError> InvalidTripPeriodHandler(InvalidTripPeriod exception) {
+    private ResponseEntity<RestMessageError> invalidTripPeriodHandler(InvalidTripPeriod exception) {
         var response = new RestMessageError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<RestMessageError> ArgumentMismatchHandler(MethodArgumentTypeMismatchException exception) {
+    public ResponseEntity<RestMessageError> argumentMismatchHandler(MethodArgumentTypeMismatchException exception) {
         var response = new RestMessageError(HttpStatus.BAD_REQUEST.value(), "Invalid Id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
