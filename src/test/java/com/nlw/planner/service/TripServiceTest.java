@@ -5,14 +5,11 @@ import com.nlw.planner.dto.TripResponseDTO;
 import com.nlw.planner.exceptions.InvalidTripPeriod;
 import com.nlw.planner.model.Trip;
 import com.nlw.planner.repository.TripRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -32,8 +29,6 @@ class TripServiceTest {
 
     @InjectMocks
     private TripService tripService;
-
-    private AutoCloseable closeable;
 
     @Test
     @DisplayName("should create trip successfully")
