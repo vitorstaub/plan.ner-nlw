@@ -9,9 +9,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class TripServiceTest {
     @Mock
     private TripRepository repository;
@@ -31,11 +34,6 @@ class TripServiceTest {
     private TripService tripService;
 
     private AutoCloseable closeable;
-
-    @BeforeEach
-    void setup() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     @DisplayName("should create trip successfully")
@@ -125,10 +123,5 @@ class TripServiceTest {
         assertEquals(true, tripConfirmed.getIsConfirmed());
 
         verify(repository, times(1)).save(any(Trip.class));
-    }
-
-    @AfterEach
-    public void close() throws Exception {
-        closeable.close();
     }
 }
