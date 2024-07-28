@@ -31,6 +31,8 @@ public class TripService {
         rawTrip.setEndsAt(LocalDateTime.parse(payload.ends_at(), DateTimeFormatter.ISO_DATE_TIME));
         rawTrip.setDestination(payload.destination());
 
+        if (rawTrip.getStartsAt().isAfter(rawTrip.getEndsAt())) throw new InvalidTripPeriod();
+
         this.repository.save(rawTrip);
 
         return rawTrip;

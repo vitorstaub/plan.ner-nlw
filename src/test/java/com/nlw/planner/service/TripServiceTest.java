@@ -78,7 +78,6 @@ class TripServiceTest {
         void setUp() {
             payload = TripPayloadFactory.getPayload();
             rawTrip = new Trip(payload);
-            // Configure payload and rawTrip as needed
         }
 
         @Test
