@@ -3,9 +3,11 @@ package com.nlw.planner.service;
 import com.nlw.planner.dto.TripRequestPayload;
 import com.nlw.planner.dto.TripResponseDTO;
 import com.nlw.planner.exceptions.InvalidTripPeriod;
+import com.nlw.planner.factory.TripPayloadFactory;
 import com.nlw.planner.model.Trip;
 import com.nlw.planner.repository.TripRepository;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,109 +16,114 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TripServiceTest {
+
     @Mock
     private TripRepository repository;
 
     @InjectMocks
-    private TripService tripService;
+    private TripService service;
 
-    @Test
-    @DisplayName("should create trip successfully")
-    void registerTripCase1() {
-        // Arrange
-        List<String> emails = Arrays.asList("vitor@gmmail", "test@outlook");
-        var payload = new TripRequestPayload("São Paulo",
-                "2024-06-25T21:51:54.7342",
-                "2024-06-26T21:51:54.7342",
-                emails,
-                "staub@gmail",
-                "staub");
+    @Nested
+    class RegisterTripTests {
+        private TripRequestPayload payload;
 
-        var trip = new Trip(payload);
-        when(repository.save(any(Trip.class))).thenReturn(trip);
+        @BeforeEach
+        void setUp() {
+            payload = TripPayloadFactory.getPayload();
+        }
 
-        // Act
-        TripResponseDTO responseDTO = tripService.registerTrip(payload);
+        @Test
+        void shouldRegisterTrip() {
+            // Arrange
+            var newTrip = new Trip(payload);
+            when(repository.save(any(Trip.class))).thenReturn(newTrip);
 
-        // Assert
-        assertEquals(trip.getId(), responseDTO.tripId());
-        verify(repository, times(1)).save(any(Trip.class));
+            // Act
+            TripResponseDTO response = service.registerTrip(payload);
+
+            // Assert
+            assertNotNull(response);
+            assertEquals(newTrip.getId(), response.tripId());
+            verify(repository, times(1)).save(any(Trip.class));
+        }
+
+        @Test
+        void shouldReturnInvalidTripPeriod() {
+            // Arrange
+            var payload = TripPayloadFactory.getPayloadWithInvalidPeriod();
+            var newTrip = new Trip(payload);
+
+            // Act & Assert
+            InvalidTripPeriod exception = assertThrows(InvalidTripPeriod.class, () -> service.registerTrip(payload));
+
+            assertEquals("Invalid Trip Period", exception.getMessage());
+            verify(repository, never()).save(any(Trip.class));
+        }
     }
 
-    @Test
-    @DisplayName("should throw InvalidTripPeriod exception")
-    void registerTripCase2() {
-        // Arrange
-        List<String> emails = Arrays.asList("vitor@gmmail", "test@outlook");
-        var payload = new TripRequestPayload("São Paulo",
-                "2024-06-25T21:51:54.7342",
-                "2024-06-23T21:51:54.7342",
-                emails,
-                "staub@gmail",
-                "staub");
+    @Nested
+    class UpdateTripTests {
+        private TripRequestPayload payload;
+        private Trip rawTrip;
 
+        @BeforeEach
+        void setUp() {
+            payload = TripPayloadFactory.getPayload();
+            rawTrip = new Trip(payload);
+            // Configure payload and rawTrip as needed
+        }
 
-        // Act & Assert
-        assertThrows(InvalidTripPeriod.class, () -> tripService.registerTrip(payload));
+        @Test
+        void shouldUpdateTrip() {
+            // Arrange
+            rawTrip.setId(UUID.randomUUID());
+            when(repository.save(any(Trip.class))).thenReturn(rawTrip);
 
-        verify(repository, never()).save(any());
+            // Act
+            var updatedTrip = service.updateTrip(payload, rawTrip);
+
+            // Assert
+            assertNotNull(updatedTrip);
+            assertEquals(rawTrip.getId(), updatedTrip.getId());
+            assertEquals(LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME), updatedTrip.getStartsAt());
+            assertEquals(LocalDateTime.parse(payload.ends_at(), DateTimeFormatter.ISO_DATE_TIME), updatedTrip.getEndsAt());
+            assertEquals(payload.destination(), updatedTrip.getDestination());
+            verify(repository, times(1)).save(rawTrip);
+        }
     }
 
-    @Test
-    @DisplayName("should update trip successfully")
-    void updateTripCase1() {
-        // Arrange
-        List<String> emails = Arrays.asList("vitor@gmmail", "test@outlook");
-        var payloadTrip = new TripRequestPayload("São Paulo",
-                "2024-06-20T21:51:54.7342",
-                "2024-06-25T21:51:54.7342",
-                emails,
-                "staub@gmail",
-                "staub");
-        var rawTrip = new Trip(payloadTrip);
-        var payload = new TripRequestPayload("Natal",
-                "2024-06-15T21:51:54.7342",
-                "2024-06-30T21:51:54.7342",
-                emails,
-                "staub@gmail",
-                "staub");
+    @Nested
+    class ConfirmTripTests {
+        private Trip trip;
 
-        // Act
-        var updatedTrip = tripService.updateTrip(payload, rawTrip);
+        @BeforeEach
+        void setUp() {
+            trip = new Trip();
+            // Configure trip as needed
+        }
 
-        assertEquals(LocalDateTime.parse("2024-06-15T21:51:54.7342", DateTimeFormatter.ISO_DATE_TIME), updatedTrip.getStartsAt());
-        assertEquals(LocalDateTime.parse("2024-06-30T21:51:54.7342", DateTimeFormatter.ISO_DATE_TIME), updatedTrip.getEndsAt());
-        assertEquals(payload.destination(), updatedTrip.getDestination());
+        @Test
+        void shouldConfirmTrip() {
+            // Arrange
+            trip.setId(UUID.randomUUID());
+            trip.setIsConfirmed(false);
+            when(repository.save(any(Trip.class))).thenReturn(trip);
 
-        verify(repository, times(1)).save(updatedTrip);
-    }
+            // Act
+            var confirmedTrip = service.confirmTrip(trip);
 
-    @Test
-    void confirmTrip() {
-        // Arrange
-        List<String> emails = Arrays.asList("vitor@gmmail", "test@outlook");
-        var payload = new TripRequestPayload("São Paulo",
-                "2024-06-20T21:51:54.7342",
-                "2024-06-25T21:51:54.7342",
-                emails,
-                "staub@gmail",
-                "staub");
-        var trip = new Trip(payload);
-
-        var tripConfirmed = tripService.confirmTrip(trip);
-
-        assertEquals(true, tripConfirmed.getIsConfirmed());
-
-        verify(repository, times(1)).save(any(Trip.class));
+            // Assert
+            assertNotNull(confirmedTrip);
+            assertTrue(confirmedTrip.getIsConfirmed());
+            verify(repository, times(1)).save(trip);
+        }
     }
 }

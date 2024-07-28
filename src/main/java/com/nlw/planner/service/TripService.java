@@ -2,6 +2,7 @@ package com.nlw.planner.service;
 
 import com.nlw.planner.dto.TripRequestPayload;
 import com.nlw.planner.dto.TripResponseDTO;
+import com.nlw.planner.exceptions.InvalidTripPeriod;
 import com.nlw.planner.model.Trip;
 import com.nlw.planner.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class TripService {
 
     public TripResponseDTO registerTrip(TripRequestPayload payload) {
         var newTrip = new Trip(payload);
+
+        if (newTrip.getStartsAt().isAfter(newTrip.getEndsAt())) throw new InvalidTripPeriod();
 
         repository.save(newTrip);
 

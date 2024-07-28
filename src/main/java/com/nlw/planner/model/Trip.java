@@ -48,7 +48,5 @@ public class Trip {
         this.ownerName = data.owner_name();
         this.startsAt = LocalDateTime.parse(data.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
         this.endsAt = LocalDateTime.parse(data.ends_at(), DateTimeFormatter.ISO_DATE_TIME);
-
-        if (startsAt.isAfter(endsAt)) throw new InvalidTripPeriod();
     }
 }
